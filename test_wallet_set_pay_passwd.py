@@ -6,6 +6,7 @@ import requests,json
 import requests, xlrd, time
 from xlutils import copy
 import os
+from hswallet.wallet_login_module import login_module
 def readExcel(file_path):
     '''''
     读取excel测试用例的函数
@@ -27,31 +28,36 @@ def readExcel(file_path):
                 # 把每一条测试用例添加到case_list中
                 case_list.append(sheet.row_values(i))
         interfaceTest(case_list, file_path)
-
+#登录后获取token 组成公共参数headers
+login_token=login_module()
+#登陆成功后，获取设置支付密码时短信验证码
+def verify_code1():
+    time.sleep(2)
+    login_headers=login_token.login()
+    time.sleep(3)
+    url_passwd_sms = "https://wallet.herbeauty.top/api/v1/sms/"
+    phone_passwd_sms = "15868314566"
+    # "13695884887"
+    url_passwd_sms = url_passwd_sms + phone_passwd_sms
+    results_passwd_sms = requests.post(url_passwd_sms, ).text
+    results_passwd_sms = json.loads(results_passwd_sms)
+    print "hhh%s" % results_passwd_sms
+    dcode_passwd_sms = results_passwd_sms["data"]["code"]
+    print dcode_passwd_sms
+    # 验证设置支付密码时的验证码.. 传入短信验证码 ，输出verify_code
+    dcode_passwd_sms = {"code": dcode_passwd_sms}  # 验证码是否与登录验证码共用
+    print dcode_passwd_sms
+    url__passwd_code = "https://wallet.herbeauty.top/api/v1/user/check_pay_passwd_code"
+    results = requests.post(url__passwd_code, headers=login_headers, json=dcode_passwd_sms).text
+    print "pass%s" % results
+    results = json.loads(results)
+    print results
+    verify_code = results["data"]["verify_code"]
+    print verify_code
+    return verify_code,login_headers
 
 def interfaceTest(case_list, file_path):
-    headers = {"Content-Type": "application/json"}
-    url_dcode = "https://wallet.herbeauty.top/api/v1/sms/"
-    phone = "13736048207"
-    # "13695884887"
-    url_dcode2 = url_dcode + phone
-    results = requests.post(url_dcode2, ).text
-    results = json.loads(results)
-    dcode = results["data"]["code"]
-    print dcode
-    # 获取token
-    url_login = "https://wallet.herbeauty.top/api/v1/login.do"
-    data = {"phone_num": phone, "code": dcode}
-    results_login = requests.post(url_login,
-                                  data).text  # {"code":0,"msg":"登录成功","data":{"token":"dc4581b61c7b82691e14b8028f0148fa","username":"测试4","account_id":2,"mobile":"13736048207"}}
-    print results_login
-    results_login = json.loads(results_login)
-    token = results_login["data"]["token"]
-    username = results_login["data"]["username"]
-    headers["token"] = str(token)
-    print headers
-
-
+    # headers = login()
     res_flags = []
     # 存测试结果的list
     request_urls = []
@@ -61,6 +67,7 @@ def interfaceTest(case_list, file_path):
     start_time = time.strftime("%m%d%H%M%S", time.localtime())
 
     for case in case_list:
+
         ''''' 
         先遍历excel中每一条case的值，然后根据对应的索引取到case中每个字段的值 
         '''
@@ -92,27 +99,10 @@ def interfaceTest(case_list, file_path):
         #获取短信验证码
         time.sleep(2)
         # if case_id>5:
-        url_passwd_sms = "https://wallet.herbeauty.top/api/v1/sms/"
-        phone_passwd_sms = "13736048207"
-        # "13695884887"
-        url_passwd_sms = url_passwd_sms + phone_passwd_sms
-        results_passwd_sms = requests.post(url_passwd_sms, ).text
-        results_passwd_sms = json.loads(results_passwd_sms)
-        print "hhh%s" % results_passwd_sms
-        dcode_passwd_sms = results_passwd_sms["data"]["code"]
-        print dcode_passwd_sms
-        # 验证设置支付密码时的验证码.. 传入短信验证码 ，输出verify_code
-        dcode_passwd_sms = {"code": dcode_passwd_sms}  # 验证码是否与登录验证码共用
-        print dcode_passwd_sms
-        url__passwd_code = "https://wallet.herbeauty.top/api/v1/user/check_pay_passwd_code"
-        results = requests.post(url__passwd_code, headers=headers, json=dcode_passwd_sms).text
-        print "pass%s" % results
-        results = json.loads(results)
-        print results
-        verify_code = results["data"]["verify_code"]
-        print verify_code
+        verify_code0 = verify_code1()
 
-
+        headers=verify_code0[1]
+        verify_code=verify_code0[0]
         if method.upper() == 'GET':
             if param == '':
                 new_url = url  # 请求报文
@@ -124,29 +114,29 @@ def interfaceTest(case_list, file_path):
             results = requests.get(new_url,headers=headers).text
             responses.append(results)
             res = readRes(results, res_check)
-        else:
+        else:# POST
             print type(param)
             print  param
             if param=='':
-                results = requests.post(url, headers=headers,json=dcode_passwd_sms).text
+                results = requests.post(url, headers=headers,json=login_token.code_msg()).text
             else:
-                data1=eval(param)
-                if case_id >5:
-                    data1["verify_code"] = verify_code
-                data=json.dumps(data1)
+                data=eval(param)
+                data["verify_code"] = verify_code
+                # data=json.dumps(data1)
                 print data
                 print type(data)
-
                 print url,data,headers
                 results = requests.post(url,json=data,headers=headers).text
             print len(results)
-            # if len(results)>1000:
-            #     responses.append(results.split("title")[1])
-            # else:
-            #
+            if len(results)>1000:
+                responses.append(results.split("<title>")[1])
+
+            else:
+                pass
+
             responses.append(results)
             # print results
-            ##??git 
+            ##??git
             request_urls.append(url)
             res = readRes(results, res_check)
 
@@ -199,16 +189,16 @@ def copy_excel(file_path, res_flags, request_urls, responses):
         sheet.write(i, 11, u'%s' % flag)
         i += 1
         # 写完之后在当前目录下(可以自己指定一个目录)保存一个以当前时间命名的测试结果，time.strftime()是格式化日期
-    new_book.save(u'%s_测试结果.xls' % time.strftime('%Y%m%d%H%M%S'))
-
-
+    name1=time.strftime('%Y%m%d%H%M%S')+"_wallet_set_pay_passwd.xls"
+    name=os.path.dirname(__file__)+"/report/"+name1
+    new_book.save(name)
 
 if __name__ == '__main__':
     try:
         # filename = sys.argv[1]
-        filename=os.path.dirname(__file__)+"\\"+"allet_password.xls"
+        filename=os.path.dirname(__file__)+"/cases/"+"wallet_set_pay_passwd.xls"
     except IndexError, e:
-        print 'Please enter a correct testcase! \n e.x: python gkk.py test_case.xls'
+        print 'Please enter a correct testcase!%s'%filename
     else:
         readExcel(filename)
     print 'success!'

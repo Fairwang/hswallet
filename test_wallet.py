@@ -1,11 +1,9 @@
 #! user/bin/env
 # -*- coding: utf-8 -*-
-import requests,json
-
-
+import json
 import requests, xlrd, time
 from xlutils import copy
-import os
+import os,re
 def readExcel(file_path):
     '''''
     读取excel测试用例的函数
@@ -39,7 +37,7 @@ def interfaceTest(case_list, file_path):
     start_time = time.strftime("%m%d%H%M%S", time.localtime())
 
     for case in case_list:
-        time.sleep(10)
+        time.sleep(5)
         ''''' 
         先遍历excel中每一条case的值，然后根据对应的索引取到case中每个字段的值 
         '''
@@ -69,7 +67,7 @@ def interfaceTest(case_list, file_path):
         #获取短信验证码
         headers = {"Content-Type": "application/json"}
         url_dcode = "https://wallet.herbeauty.top/api/v1/sms/"
-        phone = "13736048207"
+        phone = "15868314566"
         #"13695884887"
         url_dcode2 = url_dcode + phone
         results = requests.post(url_dcode2, ).text
@@ -124,7 +122,7 @@ def interfaceTest(case_list, file_path):
             res_flags.append('fail')
             # writeBug(case_id, interface_name, new_url, results, res_check)
     end_time = time.strftime("%m%d%H%M%S", time.localtime())
-    print end_time-start_time
+    print float(end_time)-float(start_time)
     copy_excel(file_path, res_flags, request_urls, responses)
 
 
@@ -167,16 +165,29 @@ def copy_excel(file_path, res_flags, request_urls, responses):
         sheet.write(i, 11, u'%s' % flag)
         i += 1
         # 写完之后在当前目录下(可以自己指定一个目录)保存一个以当前时间命名的测试结果，time.strftime()是格式化日期
-    new_book.save(u'%s_测试结果.xls' % time.strftime('%Y%m%d%H%M%S'))
+    file_path2=file_path.split("/")[-1]
+    name1=time.strftime('%Y%m%d%H%M%S')+"_"+file_path2
+    name=os.path.dirname(__file__)+"/report/"+name1
+    new_book.save(name)
 
 
 
 if __name__ == '__main__':
+
     try:
-        # filename = sys.argv[1]
-        filename=os.path.dirname(__file__)+"\\"+"allet_login.xls"
+
+        flist = []
+        filename = os.path.dirname(__file__) + "/cases/"        # print name
+        for dir, folde, file in os.walk(filename):
+            for i in file:
+                t = "%s%s" % (dir, i)
+                if (re.match('wallet_*', i)) != None:
+                    flist.append(t)
+        print flist
+
     except IndexError, e:
-        print 'Please enter a correct testcase! \n e.x: python gkk.py test_case.xls'
+        print 'Please enter a correct testcase! \n'
     else:
-        readExcel(filename)
+        for i in flist:
+            readExcel(i)
     print 'success!'
