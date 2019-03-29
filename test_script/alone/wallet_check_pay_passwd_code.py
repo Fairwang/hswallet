@@ -1,8 +1,6 @@
 #! user/bin/env
 # -*- coding: utf-8 -*-
-import requests,json
-
-
+import json
 import requests, xlrd, time
 from xlutils import copy
 import os
@@ -32,7 +30,7 @@ def readExcel(file_path):
 def login():
     headers = {"Content-Type": "application/json"}
     url_dcode = "https://wallet.herbeauty.top/api/v1/sms/"
-    phone = "13736048207"
+    phone = "15868314566"
     # "13695884887"
     url_dcode2 = url_dcode + phone
     results = requests.post(url_dcode2, ).text
@@ -56,7 +54,7 @@ def login():
 def code_msg():
     time.sleep(1)
     url_passwd_sms = "https://wallet.herbeauty.top/api/v1/sms/"
-    phone_passwd_sms = "13736048207"
+    phone_passwd_sms = "15868314566"
     # "13695884887"
     url_passwd_sms = url_passwd_sms + phone_passwd_sms
     results_passwd_sms = requests.post(url_passwd_sms, ).text
@@ -71,6 +69,7 @@ def code_msg():
 
 
 def interfaceTest(case_list, file_path):
+    time.sleep(2)
     headers = login()
 
     res_flags = []
@@ -82,6 +81,7 @@ def interfaceTest(case_list, file_path):
     start_time = time.strftime("%m%d%H%M%S", time.localtime())
 
     for case in case_list:
+        time.sleep(3)
         ''''' 
         先遍历excel中每一条case的值，然后根据对应的索引取到case中每个字段的值 
         '''

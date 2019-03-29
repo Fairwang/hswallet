@@ -1,8 +1,6 @@
 #! user/bin/env
 # -*- coding: utf-8 -*-
-import requests,json
-
-
+import json
 import requests, xlrd, time
 from xlutils import copy
 import os

@@ -165,31 +165,31 @@ def copy_excel(file_path, res_flags, request_urls, responses):
 
 if __name__ == '__main__':
 
-    # try:
-    #
-    #     flist = []
-    #     filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/"        # print name
-    #     for dir, folde, file in os.walk(filename):
-    #         for i in file:
-    #             t = "%s%s" % (dir, i)
-    #             if (re.match('wallet_*', i)) != None:
-    #                 flist.append(t)
-    #     print flist
-    #
-    # except IndexError, e:
-    #     print 'Please enter a correct testcase! \n'
-    # else:
-    #
-    #     for i in flist:
-    #         readExcel(i)
-    # print 'success!'
-
     try:
-        # filename = sys.argv[1]
-        filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/" + "wallet_banner.xls"
-        print filename
+
+        flist = []
+        filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/"        # print name
+        for dir, folde, file in os.walk(filename):
+            for i in file:
+                t = "%s%s" % (dir, i)
+                if (re.match('wallet_*', i)) != None:
+                    flist.append(t)
+        print flist
+
     except IndexError, e:
-        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_do_recharge.xls'
+        print 'Please enter a correct testcase! \n'
     else:
-        readExcel(filename)
+
+        for i in flist:
+            readExcel(i)
     print 'success!'
+
+    # try:
+    #     # filename = sys.argv[1]
+    #     filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/" + "wallet_banner.xls"
+    #     print filename
+    # except IndexError, e:
+    #     print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_do_recharge.xls'
+    # else:
+    #     readExcel(filename)
+    # print 'success!'

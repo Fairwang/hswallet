@@ -1,12 +1,10 @@
 #! user/bin/env
 # -*- coding: utf-8 -*-
-import requests,json
-
-
+import json
 import requests, xlrd, time
 from xlutils import copy
 import os
-from hswallet.wallet_login_module import login_module
+from selenium import webdriver
 def readExcel(file_path):
     '''''
     读取excel测试用例的函数
@@ -28,27 +26,6 @@ def readExcel(file_path):
                 # 把每一条测试用例添加到case_list中
                 case_list.append(sheet.row_values(i))
         interfaceTest(case_list, file_path)
-#登录后获取token 放到body中
-def login(self):
-    # headers = {"Content-Type": "application/json"}
-    url_dcode = "https://wallet.herbeauty.top/api/v1/sms/"
-    phone = "15868314566"
-    # "13695884887"
-    url_dcode2 = url_dcode + phone
-    results = requests.post(url_dcode2, ).text
-    results = json.loads(results)
-    dcode = results["data"]["code"]
-    print dcode
-    # 获取token
-    url_login = "https://wallet.herbeauty.top/api/v1/login.do"
-    data = {"phone_num": phone, "code": dcode}
-    results_login = requests.post(url_login,data).text  # {"code":0,"msg":"登录成功","data":{"token":"dc4581b61c7b82691e14b8028f0148fa","username":"测试4","account_id":2,"mobile":"13736048207"}}
-    print results_login
-    results_login = json.loads(results_login)
-    token={}
-    token01 = results_login["data"]["token"]
-    token["token"] = str(token01)
-    return token
 
 def interfaceTest(case_list, file_path):
     # headers = login()
@@ -105,17 +82,22 @@ def interfaceTest(case_list, file_path):
             responses.append(results)
             res = readRes(results, res_check)
         else:# POST
+
             print type(param)
             print  param
-            if param=='':
-                print "NONO"
-            else:
-                data=eval(param)
-                
-                print data
-                print type(data)
-                print url,data,headers
-                results = requests.post(url,json=data,headers=headers).text
+            data=eval(param)
+            driver=webdriver.Chrome()
+            driver.get("https://wallet.herbeauty.top/index/demo")
+            driver.find_element_by_name("price").send_keys(data["money"])
+            driver.find_element_by_id("pay").click()
+
+            goods
+            data["mark"]=goods
+            print data
+            print type(data)
+            print url,data,
+            results = requests.post(url,json=data).text
+            print results
             print len(results)
             if len(results)>1000:
                 responses.append(results.split("<title>")[1])
@@ -124,8 +106,6 @@ def interfaceTest(case_list, file_path):
                 pass
 
             responses.append(results)
-            # print results
-            ##??git
             request_urls.append(url)
             res = readRes(results, res_check)
 
@@ -178,14 +158,14 @@ def copy_excel(file_path, res_flags, request_urls, responses):
         sheet.write(i, 11, u'%s' % flag)
         i += 1
         # 写完之后在当前目录下(可以自己指定一个目录)保存一个以当前时间命名的测试结果，time.strftime()是格式化日期
-    name1=time.strftime('%Y%m%d%H%M%S')+"_wallet_set_pay_passwd.xls"
+    name1=time.strftime('%Y%m%d%H%M%S')+"wallet_moni_huidiao.xls"
     name=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))+"/report/"+name1
     new_book.save(name)
 
 if __name__ == '__main__':
     try:
         # filename = sys.argv[1]
-        filename=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))+"/cases/alone/"+"wallet_set_pay_passwd.xls"
+        filename=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))+"/cases/alone/"+"wallet_moni_huidiao.xls"
     except IndexError, e:
         print 'Please enter a correct testcase!%s'%filename
     else:
