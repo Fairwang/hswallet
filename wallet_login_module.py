@@ -9,7 +9,8 @@ class login_module():
     def login(self):
         headers = {"Content-Type": "application/json"}
         url_dcode = "https://wallet.herbeauty.top/api/v1/sms/"
-        phone = "15868314566"
+        # phone = "15538028720"
+        phone="15868314566"
         # "13695884887"
         url_dcode2 = url_dcode + phone
         results = requests.post(url_dcode2, ).text

@@ -70,14 +70,17 @@ def interfaceTest(case_list, file_path):
         print case_id
         time.sleep(2)
         if method.upper() == 'GET':
-            if param == '':
-                new_url = url  # 请求报文
-                request_urls.append(new_url)
-            else:
-                new_url = url + '?' + urlParam(param)  # 请求报文
-                request_urls.append(new_url)
+            # if param == '':
+            #     new_url = url  # 请求报文
+            #     request_urls.append(new_url)
+            # else:
+            #     new_url = url + '?' + urlParam(param)  # 请求报文
+            #     request_urls.append(new_url)
+            new_url=url
+            request_urls.append(new_url)
             print new_url,headers
-            results = requests.get(new_url,headers=headers).text
+            results = requests.get(new_url,data=param,headers=headers).text
+            print results
             responses.append(results)
             res = readRes(results, res_check)
         else:
@@ -97,12 +100,16 @@ def interfaceTest(case_list, file_path):
                     driver=webdriver.Chrome()
                     driver.get(aa["data"]["pay_url"])
             print results
-            # if len(results)>1000:
-            #     responses.append(results.split("title")[1])
-            # else:
-            #
-            responses.append(results)
-            print results
+            if len(results)>1000:
+                A=results.split("<title>")[1].split('</title>')[0]
+                print "a%s"%A
+                a=results.split("<h2>")[1]
+                print "c%s"%a
+                c=A+"\n"+a+"\n"
+                print c
+                responses.append(c)
+            else:
+                responses.append(results)
 
             request_urls.append(url)
             res = readRes(results, res_check)
@@ -165,31 +172,31 @@ def copy_excel(file_path, res_flags, request_urls, responses):
 
 if __name__ == '__main__':
 
-    try:
-
-        flist = []
-        filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/"        # print name
-        for dir, folde, file in os.walk(filename):
-            for i in file:
-                t = "%s%s" % (dir, i)
-                if (re.match('wallet_*', i)) != None:
-                    flist.append(t)
-        print flist
-
-    except IndexError, e:
-        print 'Please enter a correct testcase! \n'
-    else:
-
-        for i in flist:
-            readExcel(i)
-    print 'success!'
-
     # try:
-    #     # filename = sys.argv[1]
-    #     filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/" + "wallet_banner.xls"
-    #     print filename
+    #
+    #     flist = []
+    #     filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/"        # print name
+    #     for dir, folde, file in os.walk(filename):
+    #         for i in file:
+    #             t = "%s%s" % (dir, i)
+    #             if (re.match('wallet_*', i)) != None:
+    #                 flist.append(t)
+    #     print flist
+    #
     # except IndexError, e:
-    #     print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_do_recharge.xls'
+    #     print 'Please enter a correct testcase! \n'
     # else:
-    #     readExcel(filename)
+    #
+    #     for i in flist:
+    #         readExcel(i)
     # print 'success!'
+
+    try:
+        # filename = sys.argv[1]
+        filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/" + "wallet_0xA1_order_id.xls"
+        print filename
+    except IndexError, e:
+        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_0xA1_order_id.xls'
+    else:
+        readExcel(filename)
+    print 'success!'
