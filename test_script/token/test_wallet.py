@@ -80,7 +80,6 @@ def interfaceTest(case_list, file_path):
             request_urls.append(new_url)
             print new_url,headers
             results = requests.get(new_url,data=param,headers=headers).text
-            print results
             responses.append(results)
             res = readRes(results, res_check)
         else:
@@ -193,7 +192,7 @@ if __name__ == '__main__':
 
     try:
         # filename = sys.argv[1]
-        filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/" + "wallet_0xA1_order_id.xls"
+        filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/" + "wallet_investor_cash.xls"
         print filename
     except IndexError, e:
         print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_0xA1_order_id.xls'
