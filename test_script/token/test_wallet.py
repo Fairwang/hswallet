@@ -80,6 +80,7 @@ def interfaceTest(case_list, file_path):
             request_urls.append(new_url)
             print new_url,headers
             results = requests.get(new_url,data=param,headers=headers).text
+            print results
             responses.append(results)
             res = readRes(results, res_check)
         else:
