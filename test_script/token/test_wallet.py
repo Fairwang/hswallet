@@ -70,17 +70,31 @@ def interfaceTest(case_list, file_path):
         print case_id
         time.sleep(2)
         if method.upper() == 'GET':
-            # if param == '':
-            #     new_url = url  # 请求报文
-            #     request_urls.append(new_url)
-            # else:
-            #     new_url = url + '?' + urlParam(param)  # 请求报文
-            #     request_urls.append(new_url)
-            new_url=url
-            request_urls.append(new_url)
+            if param == '':
+                new_url = url  # 请求报文
+                request_urls.append(new_url)
+            else:
+                param=eval(param)
+                a_list = []
+                for i in param:
+                    a_list.append("%s=%s" % (i, param[i]))
+                param2 = '&'.join(a_list)
+                print param2
+                new_url = url + '?' + urlParam(param2)  # 请求报文
+                request_urls.append(new_url)
             print new_url,headers
             results = requests.get(new_url,data=param,headers=headers).text
             print results
+            # if len(results)>1000:
+            #     # A=results.split("<title>")[1].split('</title>')[0]
+            #     # print "a%s"%A
+            #     a=results.split("<h2>")
+            #     print "c%s"%a
+            #     c=a[1]
+            #     print c
+            #     responses.append(c)
+            # else:
+            #     responses.append(results)
             responses.append(results)
             res = readRes(results, res_check)
         else:
@@ -196,7 +210,7 @@ if __name__ == '__main__':
         filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/" + "wallet_investor_cash.xls"
         print filename
     except IndexError, e:
-        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_0xA1_order_id.xls'
+        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_investor_cash.xls'
     else:
         readExcel(filename)
     print 'success!'
