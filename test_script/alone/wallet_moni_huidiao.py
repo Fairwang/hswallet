@@ -1,13 +1,14 @@
 #! user/bin/env
 # -*- coding: utf-8 -*-
-import json
 import requests, xlrd, time
 from xlutils import copy
 import os
 from selenium import webdriver
-from hswallet.database_module import query_database
-from hswallet.wallet_sign import wallet_sign
-from hswallet.wallet_login_module import login_module
+from hswallet.common.database_module import query_database
+from hswallet.common.wallet_sign import wallet_sign
+from selenium.webdriver.support.ui import Select
+
+
 def readExcel(file_path):
     '''''
     读取excel测试用例的函数
@@ -89,6 +90,7 @@ def interfaceTest(case_list, file_path):
             responses.append(results)
             res = readRes(results, res_check)
         else:# POST
+            # sql_token="SELECT * FROM `cl_investor` where mobile=15538028720;"
             sql_token="SELECT * FROM `cl_investor` where mobile=15868314566;"
             sql_token2=query_database1.sql_token(sql_token)
             headers = {"Content-Type": "application/json"}
@@ -112,8 +114,12 @@ def interfaceTest(case_list, file_path):
             driver.get("https://wallet.herbeauty.top/index/demo")
             driver.find_element_by_name("price").clear()
             driver.find_element_by_name("price").send_keys(data["money"])
+            pay_type = Select(driver.find_element_by_id("pay_type"))
+            driver.find_element_by_id("pay_type").click()
+            pay_type.select_by_value("2")#微信
+            # pay_type.select_by_value("1")  # 支付宝
             driver.find_element_by_id("pay").click()
-            time.sleep(10)
+            time.sleep(5)
             goods_sql="SELECT goods FROM cl_order order by id desc limit 1 ;"
             goods=query_database1.query_database(goods_sql)
             data["mark"]=goods
@@ -137,6 +143,7 @@ def interfaceTest(case_list, file_path):
             results = requests.post(url,json=data,headers=headers).text
             print results
             print len(results)
+            # time.sleep(100)
             if len(results)>1000:
                 responses.append(results.split("<title>")[1])
 
@@ -203,7 +210,7 @@ def copy_excel(file_path, res_flags, request_urls, responses):
 if __name__ == '__main__':
     try:
         # filename = sys.argv[1]
-        filename=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))+"/cases/alone/"+"wallet_moni_huidiao.xls"
+        filename=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))+"/cases/alone/"+"wallet_0x23_moni_huidiao.xls"
     except IndexError, e:
         print 'Please enter a correct testcase!%s'%filename
     else:

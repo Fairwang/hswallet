@@ -5,6 +5,8 @@ from selenium import webdriver
 import requests, xlrd, time
 from xlutils import copy
 import os
+import urllib2
+import urllib
 from hswallet.common.wallet_login_module import login_module
 def readExcel(file_path):
     '''''
@@ -70,64 +72,32 @@ def interfaceTest(case_list, file_path):
         print case_id
         time.sleep(2)
         if method.upper() == 'GET':
-            if param == '':
-                new_url = url  # 请求报文
-                request_urls.append(new_url)
-            else:
-                param=eval(param)
-                a_list = []
-                for i in param:
-                    a_list.append("%s=%s" % (i, param[i]))
-                param2 = '&'.join(a_list)
-                print param2
-                # new_url = url + '?' + urlParam(param2)  # 请求报文
-                new_url = url + '?' + param2 # 请求报文
-                request_urls.append(new_url)
-            print new_url,headers
-            results = requests.get(new_url,data=param,headers=headers).text
-            print results
-            # if len(results)>1000:
-            #     # A=results.split("<title>")[1].split('</title>')[0]
-            #     # print "a%s"%A
-            #     a=results.split("<h2>")
-            #     print "c%s"%a
-            #     c=a[1]
-            #     print c
-            #     responses.append(c)
-            # else:
-            #     responses.append(results)
-            responses.append(results)
-            res = readRes(results, res_check)
+            print "this is get report"
+
         else:
+            print url
             print type(param)
             print  param
-
             if param=='':
                 results = requests.post(url, headers=headers).text
+
             else:
                 data = eval(param)
                 print data
-                results = requests.post(url,json=data,headers=headers).text
-                if "pay_url" in results:
-                    print "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
-                    aa=json.loads(results)
-                    print aa["data"]["pay_url"]
-                    driver=webdriver.Chrome()
-                    driver.get(aa["data"]["pay_url"])
-            print results
-            if len(results)>1000:
-                A=results.split("<title>")[1].split('</title>')[0]
-                print "a%s"%A
-                a=results.split("<h2>")[1]
-                print "c%s"%a
-                c=A+"\n"+a+"\n"
-                print c
-                responses.append(c)
-            else:
+                # data2=json.dumps(data)
+                # results = requests.post(url,json=data,headers=headers).text
+                # headers[]
+                data=urllib.urlencode(data)
+                response1=urllib2.Request(url,data,headers)
+                response1 = urllib2.urlopen(response1)
+                results=response1.read()
+                print "kkkk%s"%results
+                # print results
+
                 responses.append(results)
 
             request_urls.append(url)
-            res = readRes(results, res_check)
+        res = readRes(results, res_check)
 
         if 'pass' in res:
             res_flags.append('pass')
@@ -149,7 +119,6 @@ def readRes(res, res_check):
     res_check = res_check.split(';')
     for s in res_check:
         print s
-        print res
         if s in res:
             pass
         else:
@@ -210,10 +179,10 @@ if __name__ == '__main__':
 
     try:
         # filename = sys.argv[1]
-        filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/" + "wallet_0x20_bank_card_list.xls"
+        filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/alone/" + "wallet_test_wallet_bank_card_create.xls"
         print filename
     except IndexError, e:
-        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_0x20_bank_card_list.xls'
+        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_test_wallet_bank_card_create.xls'
     else:
         readExcel(filename)
     print 'success!'

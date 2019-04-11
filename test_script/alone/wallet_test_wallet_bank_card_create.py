@@ -4,8 +4,13 @@ import json
 from selenium import webdriver
 import requests, xlrd, time
 from xlutils import copy
-import os
+import os,urllib,urllib2
 from hswallet.common.wallet_login_module import login_module
+import sys
+
+reload(sys)
+
+sys.setdefaultencoding('utf')
 def readExcel(file_path):
     '''''
     读取excel测试用例的函数
@@ -86,16 +91,6 @@ def interfaceTest(case_list, file_path):
             print new_url,headers
             results = requests.get(new_url,data=param,headers=headers).text
             print results
-            # if len(results)>1000:
-            #     # A=results.split("<title>")[1].split('</title>')[0]
-            #     # print "a%s"%A
-            #     a=results.split("<h2>")
-            #     print "c%s"%a
-            #     c=a[1]
-            #     print c
-            #     responses.append(c)
-            # else:
-            #     responses.append(results)
             responses.append(results)
             res = readRes(results, res_check)
         else:
@@ -107,7 +102,16 @@ def interfaceTest(case_list, file_path):
             else:
                 data = eval(param)
                 print data
-                results = requests.post(url,json=data,headers=headers).text
+                #把字典中的汉字取出来编码试试
+                data=urllib.urlencode(data)
+                response1=urllib2.Request(url,data,headers)
+                response1 = urllib2.urlopen(response1)
+                results=response1.read()
+                print "kkkk%s"%results
+                # results = requests.post(url,json=data,headers=headers).text
+
+
+
                 if "pay_url" in results:
                     print "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
                     aa=json.loads(results)
@@ -210,10 +214,10 @@ if __name__ == '__main__':
 
     try:
         # filename = sys.argv[1]
-        filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/" + "wallet_0x20_bank_card_list.xls"
+        filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/alone/" + "wallet_test_wallet_bank_card_create.xls"
         print filename
     except IndexError, e:
-        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_0x20_bank_card_list.xls'
+        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_test_wallet_bank_card_create.xls'
     else:
         readExcel(filename)
     print 'success!'

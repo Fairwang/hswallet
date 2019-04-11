@@ -4,7 +4,7 @@ import json
 import requests, xlrd, time
 from xlutils import copy
 import os
-from hswallet.wallet_login_module import login_module
+from hswallet.common.wallet_login_module import login_module
 def readExcel(file_path):
     '''''
     读取excel测试用例的函数

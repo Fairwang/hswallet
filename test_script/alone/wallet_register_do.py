@@ -4,7 +4,7 @@ import json
 import requests, xlrd, time
 from xlutils import copy
 import os
-from hswallet.wallet_login_module import login_module
+from hswallet.common.wallet_login_module import login_module
 def readExcel(file_path):
     '''''
     读取excel测试用例的函数
@@ -108,6 +108,8 @@ def interfaceTest(case_list, file_path):
             print data
             print type(data)
             print url,data,headers
+
+            #注册时需要
             results = requests.post(url,json=data,headers=headers).text
             print len(results)
 
