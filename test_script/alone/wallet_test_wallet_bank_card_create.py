@@ -102,6 +102,9 @@ def interfaceTest(case_list, file_path):
             else:
                 data = eval(param)
                 print data
+                if "real_name" in data.items():
+
+
                 #把字典中的汉字取出来编码试试
                 data=urllib.urlencode(data)
                 response1=urllib2.Request(url,data,headers)

@@ -90,9 +90,11 @@ def interfaceTest(case_list, file_path):
             responses.append(results)
             res = readRes(results, res_check)
         else:# POST
-            # sql_token="SELECT * FROM `cl_investor` where mobile=15538028720;"
-            sql_token="SELECT * FROM `cl_investor` where mobile=15868314566;"
+            sql_token="SELECT * FROM `cl_investor` where mobile=17682308681;"
+            # sql_token="SELECT * FROM `cl_investor` where mobile=15868314566;"
             sql_token2=query_database1.sql_token(sql_token)
+            # sql_token2=str(sql_token2)
+            print "sql_token2  %s" %sql_token2
             headers = {"Content-Type": "application/json"}
             headers["token"]=sql_token2
             print type(param)

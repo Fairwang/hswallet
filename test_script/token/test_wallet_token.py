@@ -6,6 +6,8 @@ import requests, xlrd, time
 from xlutils import copy
 import os
 from hswallet.common.wallet_login_module import login_module
+from hswallet.common.database_module import query_database
+
 def readExcel(file_path):
     '''''
     读取excel测试用例的函数
@@ -28,7 +30,7 @@ def readExcel(file_path):
                 case_list.append(sheet.row_values(i))
         interfaceTest(case_list, file_path)
 
-
+query_database=query_database()
 def interfaceTest(case_list, file_path):
     res_flags = []
     # 存测试结果的list
@@ -37,8 +39,14 @@ def interfaceTest(case_list, file_path):
     responses = []
     # 存返回报文的list
     start_time = time.strftime("%m%d%H%M%S", time.localtime())
-    login_token=login_module()
-    headers = login_token.login()
+    # login_token=login_module()
+    # headers = login_token.login()
+
+    sql_token = "SELECT * FROM `cl_investor` where mobile=17682308681;"
+    sql_token2 = query_database.sql_token(sql_token)
+    headers = {"Content-Type": "application/json"}
+    headers["token"] = sql_token2
+
     time.sleep(2)
     for case in case_list:
 
@@ -210,10 +218,10 @@ if __name__ == '__main__':
 
     try:
         # filename = sys.argv[1]
-        filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/" + "wallet_0x20_bank_card_list.xls"
+        filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/" + "wallet_0x25_balance_detailed_list.xls"
         print filename
     except IndexError, e:
-        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_0x20_bank_card_list.xls'
+        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_0x25_balance_detailed_list.xls'
     else:
         readExcel(filename)
     print 'success!'
