@@ -2,13 +2,13 @@
 # coding:utf-8
 from selenium import webdriver
 import time,xlrd
-import unittest
+import unittest,random
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 from appium import webdriver
 import MySQLdb
-import os
-from hswallet.hswallet.web.LK import creat_page
+import os,requests
+from hswallet.web  import ll
 class query_database():
     def query_database(self,sql):
         coon = MySQLdb.connect(host='120.77.41.244', user='test', passwd='test@2019#0809', db='cl_p2p', port=3308,
@@ -52,69 +52,134 @@ class C2Cwap(unittest.TestCase):
     def setUp(self):
         self.desired_caps={}
         self.desired_caps['platformName']='Android'#测试的目标机器
-        self.desired_caps['platfromVersion']='8.0.0'#目标设备的系统版本
-        self.desired_caps['deviceName']='73EBB18629223414'#测试机器的名称（设备名称即可）
+        self.desired_caps['platfromVersion']='8.1.1'#目标设备的系统版本
+        self.desired_caps['deviceName']='33d04c7c'#测试机器的名称（设备名称即可）
         # self.desired_caps['browserName']='Chrome'
         self.desired_caps['noReset']='true'
         self.desired_caps['appPackage']='com.example.wallet.dev'#被测应用的包名（只有Android测试才用）
         self.desired_caps['appActivity']='com.example.wallet.core.main.SplashActivity'
-        self.desired_caps['unicodeKeyboard']='true'#支持中文输入，默认false
-        self.desired_caps['resetKeyboard'] = 'true'  # 重置输入法为系统默认
+        # self.desired_caps['unicodeKeyboard']='true'#支持中文输入，默认false
+        # self.desired_caps['resetKeyboard'] = 'true'  # 重置输入法为系统默认
         self.desired_caps['automationName'] = 'uiautomator2'
-
         self.desired_caps['noReset']='true'
         self.driver=webdriver.Remote('http://localhost:4723/wd/hub',self.desired_caps)
         self.query_database1=query_database()
-        self.wallet=creat_page.wallet_page(self.driver)
+        # self.wallet=creat_page.wallet_page(self.driver)
+
 
 
     def test_C2Cwap(self):
-        sql = "SELECT * FROM `cl_investor`  ORDER BY id desc "
-        invite_code=self.query_database1.query_database(sql)
-        current_file=os.path.dirname(__file__)+"zhuce.xls"
+        current_file=os.path.dirname(__file__)+"/zhuce.xls"
         print current_file
         xinxi0=readExcel(current_file)
         for xinxi in xinxi0:
-            phone=xinxi[0]
-            name=xinxi[2]
-            namenum=xinxi[3]
-            card=xinxi[4]
-            ylphone=xinxi[5]
-            self.wallet.zc_click()
+            sql = "SELECT * FROM `cl_investor`  ORDER BY id desc "
+            invite_code = self.query_database1.query_database(sql)
+            phone = str(int(xinxi[0]))
+            name = xinxi[1]
+            namenum = xinxi[2]
+            card = xinxi[3]
+            ylphone = str(int(xinxi[4]))
+            ## self.wallet.zc_click()
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='注册账号']").click()
-            self.driver.find_element_by_xpath("// android.widget.EditText[ @ text = '请输入手机号']").send_keys(phone)
-            self.driver.find_element_by_xpath("// android.widget.EditText[ @ text = '请输入验证码']").send_keys("999999")
-            self.driver.find_element_by_xpath("// android.widget.EditText[ @ text = '请输入邀请码']").send_keys(invite_code)
-            self.driver.find_element_by_xpath("// android.widget.EditText[ @ text = '注册']").click()
-
+            time.sleep(2)
+            # for i in phone:
+            self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入手机号']").send_keys(phone)
+            self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入验证码']").send_keys("222222")
+            self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入邀请码']").send_keys(invite_code)
+            time.sleep(2)
+            self.driver.find_element_by_xpath("//android.widget.Button[@text='注册']").click()
+            time.sleep(4)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='账户离线,不可接单']").click()
+            time.sleep(3)
             self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入本人的真实姓名']").send_keys(name)
             self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入本人的身份证号码']").send_keys(namenum)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='下一步']").click()
+            time.sleep(2)
             self.driver.find_element_by_xpath("//android.widget.EditText[@text='输入银行卡卡号']").send_keys(card)
             self.driver.find_element_by_xpath("//android.widget.EditText[@text='输入银行预留手机号码']").send_keys(ylphone)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='下一步']").click()
-
-            self.driver.find_element_by_xpath("//android.widget.TextView[@text='发送']").click()
+            time.sleep(2)
+            url01="https://wallet.herbeauty.top/api/v1/sms/"
+            url=url01+phone
+            requests.post(url)
+            time.sleep(2)
             self.driver.find_element_by_xpath("//android.widget.EditText[@text='输入验证码']").send_keys("999999")
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='下一步']").click()
-            self.driver.find_element_by_xpath("//android.widget.ImageView[@index='1']").click()#返回
+            time.sleep(2)
+            x=self.driver.get_window_size()['width']
+            y=self.driver.get_window_size()['height']
+            time.sleep(3)
+            self.driver.tap([(155 * x / 1080, 557 * y / 1920)], 500)
+            for i in range(6):
+                self.driver.tap([(309, 1360)], 500)
+                time.sleep(1)
+            self.driver.find_element_by_xpath("//android.widget.TextView[@text='完成']").click()
+            time.sleep(2)
 
+            self.driver.tap([(155 * x / 1080, 557 * y / 1920)], 500)
+            for i in range(6):
+                self.driver.tap([(309, 1360)], 500)
+                time.sleep(1)
+            self.driver.find_element_by_xpath("//android.widget.TextView[@text='完成']").click()
+            time.sleep(2)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='钱包']").click()
+            time.sleep(2)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='账户管理']").click()
+            time.sleep(2)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='微信']").click()
-
+            time.sleep(2)
             self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入账号']").send_keys(phone)
             erweima=self.driver.find_elements_by_xpath("//android.widget.ImageView[@index='1']")#二维码
+            time.sleep(2)
             erweima[1].click()#选择二维码
+            time.sleep(2)
             erweima_picture=self.driver.find_elements_by_xpath("//android.view.View[@index='1']")
-            erweima_picture[1].click()
-            erweima[2].click()#开启账户
+            time.sleep(2)
+            erweima_picture[0].click()
+            self.driver.find_element_by_xpath("//android.widget.TextView[@text='确定(1)']").click()
+            time.sleep(2)
+            erweima[-1].click()#开启账户
+            time.sleep(2)
             self.driver.find_element_by_xpath("// android.widget.TextView[ @ text = '确认绑定']").click()
-            erweima[0].click()  # 返回账户管理
-            self.driver.find_element_by_xpath("//android.widget.ImageView[@index='1']").click()
+            time.sleep(2)
+            self.driver.find_element_by_xpath("//android.widget.ImageView[@index='1']").click()#返回账户管理
+            time.sleep(2)
+            self.driver.find_element_by_xpath("//android.widget.TextView[@text='首页']").click()
+            time.sleep(2)
+            self.driver.find_element_by_xpath("//android.widget.TextView[@text='充值']").click()
+            time.sleep(2)
+            self.driver.find_element_by_xpath("//android.widget.TextView[@text='微信']").click()
+            time.sleep(2)
+            self.driver.tap([(511, 1593)], 500)
+
+            # self.driver.find_element_by_xpath("//android.widget.TextView[@text='充值']").click()
+            time.sleep(2)
+            self.driver.find_element_by_xpath("//android.widget.ImageView[@index='0']").click()
+            time.sleep(2)
+            chongzhi=self.driver.find_elements_by_xpath("//android.view.View[@index='1']")#二维码
+            time.sleep(2)
+            chongzhi[0].click()#选择二维码
+            self.driver.find_element_by_xpath("//android.widget.TextView[@text='确定(1)']").click()
+            time.sleep(2)
+            self.driver.find_element_by_xpath("//android.widget.TextView[@text='提交充值信息']").click()
+            time.sleep(1)
+            self.driver.find_element_by_xpath("//android.widget.TextView[@text='返回首页']").click()
+            time.sleep(2)
+            self.dr =ll.dr()
+            time.sleep(2)
+            self.driver.find_element_by_xpath("//android.widget.TextView[@text='账户离线,不可接单']").click()
+            time.sleep(2)
+            self.driver.find_element_by_xpath("//android.widget.TextView[@text='钱包']").click()
+            time.sleep(1)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='设置']").click()
+            time.sleep(1)
+            self.pay=ll.pay()
+            time.sleep(1)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='退出登录']").click()
+            time.sleep(1)
+            self.driver.find_element_by_xpath("//android.widget.Button[@text='确定']").click()
+            time.sleep(3)
 
 
 

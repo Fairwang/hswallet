@@ -170,9 +170,9 @@ if __name__ == '__main__':
     # print 'success!'
     try:
         # filename = sys.argv[1]
-        filename=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))+"/cases/origin/"+"wallet_recharge.xls"
+        filename=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))+"/cases/origin/"+"wallet_x01_v1_sms_phone.xls"
     except IndexError, e:
-        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_recharge.xls'
+        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_x01_v1_sms_phone.xls'
     else:
         readExcel(filename)
     print 'success!'
