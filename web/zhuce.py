@@ -80,16 +80,31 @@ class C2Cwap(unittest.TestCase):
             namenum = xinxi[2]
             card = xinxi[3]
             ylphone = str(int(xinxi[4]))
-            ## self.wallet.zc_click()
+            code=str(int(xinxi[5]))
+            # self.wallet.zc_click()
+            time.sleep(2)
+
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='注册账号']").click()
             time.sleep(2)
             # for i in phone:
             self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入手机号']").send_keys(phone)
             self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入验证码']").send_keys("222222")
-            self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入邀请码']").send_keys(invite_code)
             time.sleep(2)
+            print code
+            if code=="0":
+                self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入邀请码']").send_keys(invite_code)
+            if code=="1":
+                invite_code="999284"
+                self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入邀请码']").send_keys(invite_code)
+            if code=="2":
+                invite_code="321663"
+                self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入邀请码']").send_keys(invite_code)
+            if code == "3":
+                invite_code = "359511"
+                self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入邀请码']").send_keys(invite_code)
+            time.sleep(5)
             self.driver.find_element_by_xpath("//android.widget.Button[@text='注册']").click()
-            time.sleep(4)
+            time.sleep(8)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='账户离线,不可接单']").click()
             time.sleep(3)
             self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入本人的真实姓名']").send_keys(name)
@@ -113,14 +128,14 @@ class C2Cwap(unittest.TestCase):
             self.driver.tap([(155 * x / 1080, 557 * y / 1920)], 500)
             for i in range(6):
                 self.driver.tap([(309, 1360)], 500)
-                time.sleep(1)
+                time.sleep(2)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='完成']").click()
             time.sleep(2)
 
             self.driver.tap([(155 * x / 1080, 557 * y / 1920)], 500)
             for i in range(6):
                 self.driver.tap([(309, 1360)], 500)
-                time.sleep(1)
+                time.sleep(2)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='完成']").click()
             time.sleep(2)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='钱包']").click()
