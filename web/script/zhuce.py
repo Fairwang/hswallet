@@ -9,6 +9,7 @@ from appium import webdriver
 import MySQLdb
 import os,requests
 from hswallet.hswallet.web.common import dr_pay
+from hswallet.hswallet.web.page.creat_page import wallet_page
 class C2Cwap(unittest.TestCase):
     def setUp(self):
         self.desired_caps={}
@@ -23,7 +24,7 @@ class C2Cwap(unittest.TestCase):
         self.desired_caps['noReset']='true'
         self.driver=webdriver.Remote('http://localhost:4723/wd/hub',self.desired_caps)
         self.wallet_common=dr_pay.wallet_common()
-        # self.wallet=creat_page.wallet_page(self.driver)
+        self.wallet=wallet_page(self.driver)
 
     def test_C2Cwap(self):
         current_file=os.path.dirname(__file__)+"/zhuce.xls"
@@ -38,7 +39,7 @@ class C2Cwap(unittest.TestCase):
             card = xinxi[3]
             ylphone = str(int(xinxi[4]))
             code=str(int(xinxi[5]))
-            # self.wallet.zc_click()
+            self.wallet.zc_click()
             time.sleep(2)
 
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='注册账号']").click()

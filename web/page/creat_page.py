@@ -13,6 +13,7 @@ class wallet_page(base_page.BaseAaction):
     zc_loc=(By.XPATH,"//android.widget.TextView[@text='注册账号']")
     phone_loc=(By.XPATH,"// android.widget.EditText[ @ text = '请输入手机号']")
     sms=(By.XPATH,"// android.widget.EditText[ @ text = '请输入验证码']")
+    #注册
     def zc_click(self):
         self.click(*self.zc_loc)
     def input_pws(self,password):
