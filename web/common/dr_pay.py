@@ -36,14 +36,18 @@ class wallet_common():
     #发起支付
     def pay(self):
         driver = webdriver.Chrome()
-        driver.get("https://wallet.herbeauty.top/index/demo")
-        driver.find_element_by_name("price").clear()
-        driver.find_element_by_name("price").send_keys(100)
-        pay_type = Select(driver.find_element_by_id("pay_type"))
-        driver.find_element_by_id("pay_type").click()
-        pay_type.select_by_value("2")  # 微信
-        # pay_type.select_by_value("1")  # 支付宝
-        driver.find_element_by_id("pay").click()
+        for i in range(5):
+            driver.get("https://wallet.herbeauty.top/index/demo")
+            driver.find_element_by_name("price").clear()
+            driver.find_element_by_name("price").send_keys(100)
+            pay_type = Select(driver.find_element_by_id("pay_type"))
+            driver.find_element_by_id("pay_type").click()
+            pay_type.select_by_value("2")  # 微信
+            # pay_type.select_by_value("1")  # 支付宝
+            driver.find_element_by_id("pay").click()
+            windows=driver.window_handles
+            driver.switch_to.window(windows[0])
+
 
     #连接数据库
     def query_database(self,sql):
@@ -85,3 +89,6 @@ class wallet_common():
                     case_list.append(sheet.row_values(i))
             return case_list
 
+# pay=wallet_common()
+# for i in range(100):
+#     pay.pay()

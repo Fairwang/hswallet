@@ -2,9 +2,7 @@
 # coding:utf-8
 import os
 from selenium import webdriver
-from hswallet.hswallet.web.common  import dr_pay
-
-
+from hswallet.web.common  import dr_pay
 
 import time ,unittest
 class C2Cwap(unittest.TestCase):
@@ -36,17 +34,25 @@ class C2Cwap(unittest.TestCase):
             print phone
             self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入手机号']").send_keys(phone)
             self.driver.find_element_by_xpath("//android.widget.EditText[@text='请输入验证码']").send_keys('123456')
+            time.sleep(1)
             self.driver.find_element_by_xpath("//android.widget.Button[@text='登录']").click()
-            time.sleep(2)
+            time.sleep(8)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='账户离线,不可接单']").click()
+            time.sleep(8)
+            self.pay=self.wallet_common.pay()
+            time.sleep(12)
+            tixing=self.driver.find_elements_by_xpath("//android.widget.TextView[@text='待收款']")
+            print tixing
+            tixing[0].click()
             time.sleep(2)
-            time.sleep(2)
+            self.driver.find_element_by_xpath("//android.widget.TextView[@text='确认已收款']").click()
+            time.sleep(4)
+            self.driver.find_element_by_xpath("//android.widget.TextView[@text='确定']").click()
+            time.sleep(8)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='钱包']").click()
             time.sleep(1)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='设置']").click()
-            time.sleep(1)
-            self.pay=self.wallet_common.pay()
-            time.sleep(1)
+            time.sleep(2)
             self.driver.find_element_by_xpath("//android.widget.TextView[@text='退出登录']").click()
             time.sleep(1)
             self.driver.find_element_by_xpath("//android.widget.Button[@text='确定']").click()

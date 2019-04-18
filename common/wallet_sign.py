@@ -37,12 +37,17 @@ class wallet_sign():
 
 # aa=wallet_sign()
 # cc={'money': '1.00', 'dt': 1554098687, 'useids': '4', 'type': 'alipay', 'mark': u'\u63ed\u5c0f\u7ea2=\u5357\u4eac(\u67e0\u6aac\u7ef8\u827212/21)'}##unicode 编码不能无法haxi
-#{'mark': '\u63ed\u5c0f\u7ea2=\u5357\u4eac(\u67e0\u6aac\u7ef8\u827212/21)'}可以成功
-#"{"mark":"沉亮=乌鲁木齐(中蓝07/21)"}可以成功
-
+# {'mark': '\u63ed\u5c0f\u7ea2=\u5357\u4eac(\u67e0\u6aac\u7ef8\u827212/21)'}可以成功
+# "{"mark":"沉亮=乌鲁木齐(中蓝07/21)"}可以成功
+#
 # for key,value in cc.items():
 #     if key=="mark":
 #         cc[key]=cc[key].encode("utf-8")##将其改为utf-8
 # print "CC%s"%cc
 #
 # bb=aa.wallet_sign(**cc)
+
+bb=wallet_sign()
+cc={"type":"wechat","userids":"63","money":"100.00","mark":"T1518123354","dt":"1555485666"}
+dd=bb.wallet_sign(**cc)
+print dd

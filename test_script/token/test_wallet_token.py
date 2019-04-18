@@ -42,7 +42,7 @@ def interfaceTest(case_list, file_path):
     # login_token=login_module()
     # headers = login_token.login()
 
-    sql_token = "SELECT * FROM `cl_investor` where mobile=17682308681;"
+    sql_token = "SELECT * FROM `cl_investor` where mobile=15833330060;"
     sql_token2 = query_database.sql_token(sql_token)
     headers = {"Content-Type": "application/json"}
     headers["token"] = sql_token2
@@ -218,10 +218,10 @@ if __name__ == '__main__':
 
     try:
         # filename = sys.argv[1]
-        filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/" + "wallet_0x25_balance_detailed_list.xls"
+        filename = os.path.dirname(os.path.dirname(os.path.dirname(__file__))) + "/cases/token/" + "wallet_0x05_user_info.xls"
         print filename
     except IndexError, e:
-        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_0x25_balance_detailed_list.xls'
+        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_0x05_user_info.xls'
     else:
         readExcel(filename)
     print 'success!'
