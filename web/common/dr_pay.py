@@ -34,19 +34,19 @@ class wallet_common():
         dr.find_element_by_name("total_fee").send_keys(10000)
         dr.find_element_by_id("sub").click()
     #发起支付
-    def pay(self):
+    def pay(self,id):
         driver = webdriver.Chrome()
-        for i in range(5):
-            driver.get("https://wallet.herbeauty.top/index/demo")
-            driver.find_element_by_name("price").clear()
-            driver.find_element_by_name("price").send_keys(100)
-            pay_type = Select(driver.find_element_by_id("pay_type"))
-            driver.find_element_by_id("pay_type").click()
-            pay_type.select_by_value("2")  # 微信
-            # pay_type.select_by_value("1")  # 支付宝
-            driver.find_element_by_id("pay").click()
-            windows=driver.window_handles
-            driver.switch_to.window(windows[0])
+        driver.get("https://wallet.herbeauty.top/index/demo")
+        driver.find_element_by_name("price").clear()
+        driver.find_element_by_name("price").send_keys(1000)
+        pay_type = Select(driver.find_element_by_id("pay_type"))
+        driver.find_element_by_id("pay_type").click()
+        pay_type.select_by_value("2")  # 微信
+        driver.find_element_by_name("account_id").send_keys(id)
+        # pay_type.select_by_value("1")  # 支付宝
+        driver.find_element_by_id("pay").click()
+        # windows=driver.window_handles
+        # driver.switch_to.window(windows[0])
 
 
     #连接数据库
