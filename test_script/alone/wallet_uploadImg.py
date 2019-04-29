@@ -5,7 +5,6 @@ import requests, xlrd, time
 from xlutils import copy
 import os
 from hswallet.common.wallet_login_module import login_module
-from hswallet.common.database_module import query_database
 def readExcel(file_path):
     '''''
     读取excel测试用例的函数
@@ -27,28 +26,23 @@ def readExcel(file_path):
                 # 把每一条测试用例添加到case_list中
                 case_list.append(sheet.row_values(i))
         interfaceTest(case_list, file_path)
-
-
 #登录后获取token 组成公共参数headers
-# login_token=login_module()
-login_token=query_database()
-sql="SELECT * FROM `cl_investor` where username='15833330009'"
-token=login_token.sql_token(sql)
+login_token=login_module()
 #登陆成功后，获取设置支付密码时短信验证码
-# def sms():
-#     # time.sleep(2)
-#     login_headers=login_token.login()
-#     # time.sleep(3)
-#     url_passwd_sms = "https://wallet.herbeauty.top/api/v1/sms/"
-#     phone_passwd_sms = "15833330009"
-#     # "13695884887"
-#     url_passwd_sms = url_passwd_sms + phone_passwd_sms
-#     results_passwd_sms = requests.post(url_passwd_sms, ).text
-#     results_passwd_sms = json.loads(results_passwd_sms)
-#     print "hhh%s" % results_passwd_sms
-#     dcode_passwd_sms = results_passwd_sms["data"]["code"]
-#     print dcode_passwd_sms
-#     return dcode_passwd_sms,login_headers
+def sms():
+    # time.sleep(2)
+    login_headers=login_token.login()
+    # time.sleep(3)
+    url_passwd_sms = "https://wallet.herbeauty.top/api/v1/sms/"
+    phone_passwd_sms = "15355433857"
+    # "13695884887"
+    url_passwd_sms = url_passwd_sms + phone_passwd_sms
+    results_passwd_sms = requests.post(url_passwd_sms, ).text
+    results_passwd_sms = json.loads(results_passwd_sms)
+    print "hhh%s" % results_passwd_sms
+    dcode_passwd_sms = results_passwd_sms["data"]["code"]
+    print dcode_passwd_sms
+    return dcode_passwd_sms,login_headers
 
 def interfaceTest(case_list, file_path):
     # headers = login()
@@ -59,6 +53,7 @@ def interfaceTest(case_list, file_path):
     responses = []
     # 存返回报文的list
     start_time = time.strftime("%m%d%H%M%S", time.localtime())
+
     for case in case_list:
 
         ''''' 
@@ -92,9 +87,8 @@ def interfaceTest(case_list, file_path):
         #获取短信验证码
         time.sleep(2)
         # if case_id>5:
-        # sms1=sms()
-        # headers=sms1[1]
-        headers={"Content-Type": "application/json"}
+        sms1=sms()
+        headers=sms1[1]
         if method.upper() == 'GET':
             if param == '':
                 new_url = url  # 请求报文
@@ -114,6 +108,9 @@ def interfaceTest(case_list, file_path):
             print data
             print type(data)
             print url,data,headers
+            files = {'file': open("{}", 'rb')}.format(param)
+            r = requests.post(url, headers, files)
+
             results = requests.post(url,json=data,headers=headers).text
             print len(results)
 
@@ -176,14 +173,14 @@ def copy_excel(file_path, res_flags, request_urls, responses):
         sheet.write(i, 11, u'%s' % flag)
         i += 1
         # 写完之后在当前目录下(可以自己指定一个目录)保存一个以当前时间命名的测试结果，time.strftime()是格式化日期
-    name1=time.strftime('%Y%m%d%H%M%S')+"wallet_0x09_login.do.xls"
+    name1=time.strftime('%Y%m%d%H%M%S')+"wallet_test_wallet_uploadImg.xls"
     name=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))+"/report/"+name1
     new_book.save(name)
 
 if __name__ == '__main__':
     try:
         # filename = sys.argv[1]
-        filename=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))+"/cases/alone/"+"wallet_0x09_login.do.xls"
+        filename=os.path.dirname(os.path.dirname(os.path.dirname(__file__)))+"/cases/alone/"+"wallet_test_wallet_uploadImg.xls"
     except IndexError, e:
         print 'Please enter a correct testcase!%s'%filename
     else:

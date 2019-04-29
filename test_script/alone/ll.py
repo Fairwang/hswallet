@@ -20,28 +20,37 @@
 # b='{"code=-1,"msg=姓名不能为空","data={}}'
 # if a in b:
 #     print 11
-print str("中文")
-print type(str("中文"))
-import MySQLdb
-class query_database():
-    def query_database(self,sql):
-        coon = MySQLdb.connect(host='120.77.41.244', user='test', passwd='test@2019#0809', db='cl_p2p', port=3308,
-                               charset='utf8')
 
-        cursor = coon.cursor(cursorclass=MySQLdb.cursors.DictCursor)  # 带有键值对的数组
-        try:
-            cur = cursor.execute(sql)
-            rows = cursor.fetchall()
-            print rows
-            print type(rows)
-            print rows[0]
-            print rows[0]["invite_code"]
-            tt=rows[0]["invite_code"]
-            return tt
-        except:
-            print "Error: This is except:goods"
-        coon.close()
-query_database1=query_database()
-sql="SELECT * FROM `cl_investor`  ORDER BY id desc "
-c=query_database1.query_database(sql)
-print c
+
+# print str("中文")
+# print type(str("中文"))
+# import MySQLdb
+# class query_database():
+#     def query_database(self,sql):
+#         coon = MySQLdb.connect(host='120.77.41.244', user='test', passwd='test@2019#0809', db='cl_p2p', port=3308,
+#                                charset='utf8')
+#
+#         cursor = coon.cursor(cursorclass=MySQLdb.cursors.DictCursor)  # 带有键值对的数组
+#         try:
+#             cur = cursor.execute(sql)
+#             rows = cursor.fetchall()
+#             print rows
+#             print type(rows)
+#             print rows[0]
+#             print rows[0]["invite_code"]
+#             tt=rows[0]["invite_code"]
+#             return tt
+#         except:
+#             print "Error: This is except:goods"
+#         coon.close()
+# query_database1=query_database()
+# sql="SELECT * FROM `cl_investor`  ORDER BY id desc "
+# c=query_database1.query_database(sql)
+# print c
+
+import requests
+url="https://wallet.herbeauty.top/api/v1/uploadImg"
+headers={"Content-Type": "application/json","token":"209f305b30dd199ea2ddf0e1ec31d45d"}
+files={'file':open("C:\Users\\tinyw\Desktop\\之鞥文.jpg",'rb')}
+r=requests.post(url,headers,files)
+print r

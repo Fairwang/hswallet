@@ -13,8 +13,11 @@ class C2Cwap(unittest.TestCase):
         self.desired_caps['deviceName']='33d04c7c'#测试机器的名称（设备名称即可）
         # self.desired_caps['browserName']='Chrome'
         self.desired_caps['noReset']='true'
-        self.desired_caps['appPackage']='com.example.wallet.dev'#被测应用的包名（只有Android测试才用）
-        self.desired_caps['appActivity']='com.example.wallet.core.main.SplashActivity'
+        # self.desired_caps['appPackage']='com.example.wallet.dev'#被测应用的包名（只有Android测试才用）
+        # self.desired_caps['appActivity']='com.example.wallet.core.main.SplashActivity'
+        self.desired_caps['appPackage']='com.hongshan.wallet.dev'#被测应用的包名（只有Android测试才用）
+        self.desired_caps['appActivity']='com.hongshan.wallet.core.main.SplashActivity'
+
         # self.desired_caps['unicodeKeyboard']='true'#支持中文输入，默认false
         # self.desired_caps['resetKeyboard'] = 'true'  # 重置输入法为系统默认
         self.desired_caps['automationName'] = 'uiautomator2'
