@@ -12,6 +12,12 @@ class BaseAaction():
         return self.driver.find_element(*loc)
         # except Exception as e:
         #     raise e
+    def find_elements(self,*loc):
+        # try:
+        WebDriverWait(self.driver,10).until(EC.presence_of_element_located(loc))
+        return self.driver.find_elements(*loc)
+        # except Exception as e:
+        #     raise e
 
     def click(self,*loc):
         try:
