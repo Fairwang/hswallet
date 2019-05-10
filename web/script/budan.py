@@ -38,7 +38,7 @@ for i in table[1:]:
     if i[5]==u"等待付款":
         budans[j].click()#第二次一直定位不到，因为循环一次后，没有回到补单界面
         webui_page.order_budan_iframe()
-        webui_page.order_budan_sub()
+        webui_page.order_budan_sub()# 点击成功后，当前补单界面自动消失
         time.sleep(2)
         webui_page.order_iframe()#切换到补单界面后，需要再次回到订单界面
         # driver.switch_to.parent_frame()
