@@ -22,8 +22,7 @@ class webui_page(base_page.BaseAaction):
     #用户列表操作
     ui_investor=(By.LINK_TEXT,"用户管理")
     ui_investor_list = (By.LINK_TEXT, "用户列表")
-    ui_investor_iframe=(By.XPATH,"//*[@contains,'/admin/investor/index.html']")
-
+    ui_investor_iframe=(By.XPATH,"//*[contains(@src,'/admin/investor/index.html')]")
 
     # 交易管理操作
     #订单页面
@@ -51,3 +50,30 @@ class webui_page(base_page.BaseAaction):
     ui_sub=(By.ID,"sub")
     def order_budan_sub(self):
         self.click(*self.ui_sub)
+ #主界面
+    #内容管理操作
+    ui_neirong=(By.LINK_TEXT,"内容管理")
+    ui_app_version=(By.LINK_TEXT,"APP发布")
+    ui_app_versionpublish_iframe=(By.XPATH,"//*[contains(@src,'/admin/app_version/versionpublish.html')]")
+
+    ui_version = (By.ID,"version")
+    ui_desc = (By.ID, "desc")
+    ui_apk_url = (By.ID, "apk_url")
+    def neirong(self):
+        self.click(*self.ui_neirong)
+    def app_version(self):
+        self.click(*self.ui_version)
+    def app_versionpublish_iframe(self):
+        self.click(*self.ui_app_versionpublish_iframe)
+
+    def versionpublish_iframe(self):
+        versionpublish_iframe_xpath=self.find_element(*self.ui_app_versionpublish_iframe)
+        self.driver.switch_to.frame(versionpublish_iframe_xpath)
+    def version(self,version):
+        self.send_keys(version,*self.ui_version)
+    def desc(self,desc):
+        self.send_keys(desc,*self.ui_desc)
+    def apk_url(self,apk_url):
+        self.send_keys(apk_url,*self.ui_apk_url)
+
+
