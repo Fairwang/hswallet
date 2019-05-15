@@ -10,3 +10,18 @@ import  time
 
 driver=webdriver.Chrome()
 driver.get("https://wallet.herbeauty.top/admin/index/index.html")
+webui_page=webui_page(driver)
+user="admin"
+# password=""
+input_user=webui_page.input_user(user)
+# input_passw=webui_page.input_passw(password)
+time.sleep(10)
+login=webui_page.login()
+time.sleep(5)
+webui_page.neirong()
+webui_page.app_version()
+webui_page.versionpublish_iframe()
+webui_page.version("zzz")
+webui_page.desc("10.2")
+webui_page.apk_url("C:\Users\\tinyw\Desktop\wallet_apk\\app-develop-debug0510guoqi.apk")
+webui_page.app_version_sub()
