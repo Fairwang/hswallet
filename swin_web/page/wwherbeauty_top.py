@@ -24,6 +24,7 @@ class top_page(base_page.BaseAaction):
     ui_order=(By.LINK_TEXT,"订单管理")
     ui_order_list = (By.XPATH, "//*[contains(@href,'/manager_Order_index.html')]")
     ui_order_iframe=(By.XPATH,"//*[contains(@src,'/manager_Order_index.html')]")
+
     def order(self):
         self.click(*self.ui_order)
     def order_list(self):
@@ -31,11 +32,14 @@ class top_page(base_page.BaseAaction):
     def order_iframe(self):
         ui_order_iframe_xpath=self.find_element(*self.ui_order_iframe)
         self.driver.switch_to.frame(ui_order_iframe_xpath)
+        print "switch true"
 
     ##搜索订单导出
-    ui_create_time=(By.ID,"create_time")
+    ui_create_time=(By.ID,"createtime")
     ui_search=(By.CLASS_NAME,"glyphicon-search")
     ui_excelExportData=(By.ID,"export")
+    #订单描述
+    ui_memberid=(By.NAME,"memberid")
     def create_time(self,time):
         self.click(*self.ui_create_time)
         self.send_keys(time,*self.ui_create_time)
@@ -43,3 +47,5 @@ class top_page(base_page.BaseAaction):
         self.click(*self.ui_search)
     def excelExportData(self):
         self.click(*self.ui_excelExportData)
+    def memberid(self):
+        self.click(*self.ui_memberid)

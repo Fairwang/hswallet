@@ -2,7 +2,8 @@
 # coding:utf-8
 from selenium import webdriver
 from hswallet.swin_web.page.wwherbeauty_top import top_page
-import time
+from hswallet.swin_web.common.yesterday import Yesterday
+import time,datetime
 driver=webdriver.Chrome()
 driver.get("https://www.herbeauty.top/manager_Login_index.html")
 
@@ -16,11 +17,13 @@ webui_page.login()
 driver.maximize_window()
 webui_page.order()
 webui_page.order_list()
+
 webui_page.order_iframe()
-starttime = 17
-endtime = starttime+1
-create_time="2019-05-"+str(starttime)+" 00:00:00 | 2019-05-"+str(endtime)+" 00:00:00"
+yes_time=Yesterday()
+today = datetime.date.today()
+create_time=str(yes_time)+" 00:00:00 | "+str(today)+" 00:00:00"
 webui_page.create_time(create_time)
+webui_page.memberid()
 webui_page.excelExportData()
 time.sleep(5)
 

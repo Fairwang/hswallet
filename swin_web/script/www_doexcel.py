@@ -4,8 +4,8 @@
 #登录后台，查询订单，下载Excel，对数据进行统计，
 #需要修改查询时间和修改Excel的名称和第一行的内容
 
-import xlrd,xlwt
-
+import xlrd,xlwt,os
+from hswallet.swin_web.common.yesterday import Yesterday
 def readExcel(file_path):
     '''''
     读取excel测试用例的函数
@@ -16,7 +16,7 @@ def readExcel(file_path):
         book = xlrd.open_workbook(file_path)  # 打开excel
     except Exception, e:
         # 如果路径不在或者excel不正确，返回报错信息
-        print '111路径不在或者excel不正确', e
+        print '啊啊啊路径不在或者excel不正确', e
         return e
     else:
         sheet = book.sheet_by_index(0)
@@ -31,75 +31,78 @@ def readExcel(file_path):
 
 def fenxiexcel(case_list):
     #笔数和金额统计
-    all_wechat_pens=0
-    success_wechat_pens=0
-    fail_wechat_pens=0
-    all_wechat_price=0
-    all_sum=0
-    success_wechat_price=0
-    yichang_wechat_pens=0
+    all_zhuanka_pens=0
+    success_zhuanka_pens=0
+    fail_zhuanka_pens=0
+    all_zhuanka_price=0
+    success_zhuanka_price=0
 
-    all_ali_pens=0
-    success_ali_pens=0
-    fail_ali_pens=0
-    all_ali_price=0
-    success_ali_price=0
-    yichang_ali_pens=0
+    all_wangyin_pens=0
+    success_wangyin_pens=0
+    fail_wangyin_pens=0
+    all_wangyin_price=0
+    success_wangyin_price=0
 
     for case in case_list:
         ''''' 
         先遍历excel中每一条case的值，然后根据对应的索引取到case中每个字段的值 
         '''
         try:
-            #金额，方式，交易状态,交易副状态
-            price=case[3]
-            type=case[4]
-            status=case[5]
-            status1=case[6]
+            #金额，渠道，交易状态
+            price=case[4]
+            type=case[9]
+            status=case[11]
         except Exception, e:
             return '测试用例格式不正确！%s' % e
-        all_sum=all_sum+price
-        if type==u"微信":
-            all_wechat_price=all_wechat_price+price
-            all_wechat_pens+=1
-            if status==u"付款成功":
-                success_wechat_pens+=1
-                success_wechat_price=success_wechat_price+price
-                if status1==u"异常完成":
-                    yichang_wechat_pens+=1
+        if type==u"米营支付(转卡)-json":
+            all_zhuanka_price=all_zhuanka_price+price
+            all_zhuanka_pens+=1
+            if u"成功" in status:
+                success_zhuanka_pens+=1
+                success_zhuanka_price=success_zhuanka_price+price
             else:
-                fail_wechat_pens+=1
-    print all_wechat_pens
-    success=format(float(success_wechat_pens)/float(all_wechat_pens),".3f")
-    yichangbili=format(float(yichang_wechat_pens)/float(all_wechat_pens),".3f")
-
-
+                fail_zhuanka_pens+=1
+        if type == u"米营网银支付-json":
+            all_wangyin_price = all_wangyin_price + price
+            all_wangyin_pens += 1
+            if u"成功" in status :
+                success_wangyin_pens += 1
+                success_wangyin_price = success_wangyin_price + price
+            else:
+                fail_wangyin_pens += 1
+    tongji_time=Yesterday()
+    print tongji_time
+    success_zhuanka=format(float(success_zhuanka_pens)/float(all_zhuanka_pens),".3f")
+    success_wangyin=format(float(success_wangyin_pens)/float(all_wangyin_pens),".3f")
     workbook=xlwt.Workbook(encoding="utf-8")
-    worksheet=workbook.add_sheet("wechat")
-    worksheet.write(1,0,all_wechat_pens)
-    worksheet.write(1,1,all_sum)
-    worksheet.write(1,3,all_wechat_price)
-    worksheet.write(1,4, success_wechat_price)
-    worksheet.write(1,5,success_wechat_pens)
-    worksheet.write(1,6,fail_wechat_pens)
-    worksheet.write(1,7,yichang_wechat_pens)
-    worksheet.write(1,8,success)
-    worksheet.write(1,9,yichangbili)
-
-
-
-
-    # print all_wechat_pens,all_wechat_price,success_wechat_pens,fail_wechat_pens,yichang_wechat_pens,success,yichangbili
-    workbook.save("1111.xls")
+    worksheet=workbook.add_sheet("zhuanka")
+    worksheet.write(1, 0, tongji_time)
+    worksheet.write(1,1,all_zhuanka_pens)
+    worksheet.write(1,2,all_zhuanka_price)
+    worksheet.write(1,3, success_zhuanka_price)
+    worksheet.write(1,4,success_zhuanka_pens)
+    worksheet.write(1,5,fail_zhuanka_pens)
+    worksheet.write(1,7,success_zhuanka)
+    #wangyintongji
+    worksheet.write(2, 0, tongji_time)
+    worksheet.write(2, 1, all_wangyin_pens)
+    worksheet.write(2, 2, all_wangyin_price)
+    worksheet.write(2, 3, success_wangyin_price)
+    worksheet.write(2, 4, success_wangyin_pens)
+    worksheet.write(2, 5, fail_wangyin_pens)
+    worksheet.write(2, 7, success_wangyin)
+    workbook.save("datatongji.xls")
 
 if __name__ == '__main__':
     try:
-        # filename = sys.argv[1]
-        # excel_path=os.path.dirname(__file__)+"/订单019.xls"
-        # print excel_path
-        excel_path=r"F:\shujutongji\0515.xls"
+        path=r"C:\Users\tinyw\Downloads"
+        excel_paths=os.listdir(path)
+        for i in excel_paths:
+            if "EXCEL" in i:
+                excel_path=path+"\\"+i
+                print excel_path
     except IndexError, e:
-        print 'Please enter a correct testcase! \n e.x: python gkk.py wallet_x01_v1_sms_phone.xls'
+        print 'Please enter a correct file path'
     else:
         readExcel(excel_path)
     print 'success!'

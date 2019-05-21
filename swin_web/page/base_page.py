@@ -21,6 +21,7 @@ class BaseAaction():
 
     def click(self,*loc):
         try:
+            print self.find_element(*loc).text
             self.find_element(*loc).click()
         except AttributeError,e:
             raise e
