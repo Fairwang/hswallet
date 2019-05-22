@@ -24,6 +24,7 @@ today = datetime.date.today()
 create_time=str(yes_time)+" 00:00:00 | "+str(today)+" 00:00:00"
 webui_page.create_time(create_time)
 webui_page.memberid()
+webui_page.search()
 webui_page.excelExportData()
 time.sleep(5)
 

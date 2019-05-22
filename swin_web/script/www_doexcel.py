@@ -43,6 +43,12 @@ def fenxiexcel(case_list):
     all_wangyin_price=0
     success_wangyin_price=0
 
+    all_zhipay_pens = 0
+    success_zhipay_pens = 0
+    fail_zhipay_pens = 0
+    all_zhipay_price = 0
+    success_zhipay_price = 0
+
     for case in case_list:
         ''''' 
         先遍历excel中每一条case的值，然后根据对应的索引取到case中每个字段的值 
@@ -70,10 +76,21 @@ def fenxiexcel(case_list):
                 success_wangyin_price = success_wangyin_price + price
             else:
                 fail_wangyin_pens += 1
+
+        if type == u"智支付-json":
+            all_zhipay_price = all_zhipay_price + price
+            all_zhipay_pens += 1
+            if u"成功" in status:
+                success_zhipay_pens += 1
+                success_zhipay_price = success_zhipay_price + price
+            else:
+                fail_zhipay_pens += 1
+
     tongji_time=Yesterday()
     print tongji_time
     success_zhuanka=format(float(success_zhuanka_pens)/float(all_zhuanka_pens),".3f")
     success_wangyin=format(float(success_wangyin_pens)/float(all_wangyin_pens),".3f")
+    success_zhipay = format(float(success_zhipay_pens) / float(all_zhipay_pens), ".3f")
     workbook=xlwt.Workbook(encoding="utf-8")
     worksheet=workbook.add_sheet("zhuanka")
     worksheet.write(1, 0, tongji_time)
@@ -91,7 +108,16 @@ def fenxiexcel(case_list):
     worksheet.write(2, 4, success_wangyin_pens)
     worksheet.write(2, 5, fail_wangyin_pens)
     worksheet.write(2, 7, success_wangyin)
+    #zhipaytongji
+    worksheet.write(3, 0, tongji_time)
+    worksheet.write(3, 1, all_zhipay_pens)
+    worksheet.write(3, 2, all_zhipay_price)
+    worksheet.write(3, 3, success_zhipay_price)
+    worksheet.write(3, 4, success_zhipay_pens)
+    worksheet.write(3, 5, fail_zhipay_pens)
+    worksheet.write(3, 7, success_zhipay)
     workbook.save("datatongji.xls")
+
 
 if __name__ == '__main__':
     try:
