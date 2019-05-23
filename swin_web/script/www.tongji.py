@@ -16,6 +16,7 @@ time.sleep(15)
 webui_page.login()
 driver.maximize_window()
 webui_page.order()
+time.sleep(1)
 webui_page.order_list()
 
 webui_page.order_iframe()
