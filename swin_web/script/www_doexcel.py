@@ -36,18 +36,21 @@ def fenxiexcel(case_list):
     fail_zhuanka_pens=0
     all_zhuanka_price=0
     success_zhuanka_price=0
+    success_zhuanka=0
 
     all_wangyin_pens=0
     success_wangyin_pens=0
     fail_wangyin_pens=0
     all_wangyin_price=0
     success_wangyin_price=0
+    success_wangyin=0
 
     all_zhipay_pens = 0
     success_zhipay_pens = 0
     fail_zhipay_pens = 0
     all_zhipay_price = 0
     success_zhipay_price = 0
+    success_zhipay = 0
 
     for case in case_list:
         ''''' 
@@ -88,9 +91,18 @@ def fenxiexcel(case_list):
 
     tongji_time=Yesterday()
     print tongji_time
-    success_zhuanka=format(float(success_zhuanka_pens)/float(all_zhuanka_pens),".3f")
-    success_wangyin=format(float(success_wangyin_pens)/float(all_wangyin_pens),".3f")
-    success_zhipay = format(float(success_zhipay_pens) / float(all_zhipay_pens), ".3f")
+    if success_zhuanka_pens==0:
+        pass
+    else:
+        success_zhuanka=format(float(success_zhuanka_pens)/float(all_zhuanka_pens),".3f")
+    if success_wangyin_pens == 0:
+        pass
+    else:
+        success_wangyin=format(float(success_wangyin_pens)/float(all_wangyin_pens),".3f")
+    if success_zhipay_pens == 0:
+        pass
+    else:
+        success_zhipay = format(float(success_zhipay_pens) / float(all_zhipay_pens), ".3f")
     workbook=xlwt.Workbook(encoding="utf-8")
     worksheet=workbook.add_sheet("zhuanka")
     worksheet.write(1, 0, tongji_time)

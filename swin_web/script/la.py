@@ -2,7 +2,7 @@
 # coding:utf-8
 import re
 
-print 8.98*0.15
+print 96368.16-996-996-996-996-100-996
 
 
 
