@@ -11,14 +11,14 @@ class query_database():
         try:
             cur = cursor.execute(sql)
             rows = cursor.fetchall()
-            print rows
-            print type(rows)
-            print rows[0]
-            print rows[0]["goods"]
+            print (rows)
+            print (type(rows))
+            print (rows[0])
+            print (rows[0]["goods"])
             tt=rows[0]["goods"]
             return tt
         except:
-            print "Error: This is except:goods"
+            print ("Error: This is except:goods")
         coon.close()
 
     def sql_token(self,sql):
@@ -29,14 +29,14 @@ class query_database():
         try:
             cur = cursor.execute(sql)
             rows = cursor.fetchall()
-            print rows
-            print type(rows)
-            print rows[0]
-            print rows[0]["token"]
+            print (rows)
+            print (type(rows))
+            print (rows[0])
+            print (rows[0]["token"])
             token=rows[0]["token"]
             return token
         except:
-            print "Error: This is except  sql_token"
+            print ("Error: This is except  sql_token")
         coon.close()
 # sql="SELECT goods FROM cl_order order by id desc limit 1 ;"
 # aa=query_database(sql)

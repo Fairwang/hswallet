@@ -16,11 +16,9 @@ class wallet_sign():
         key = '2bHg2U@nAG7q$4Fh'  # 商户密钥
         # keys=kw
         keys = sorted(kw,reverse=True)  # 排序 得出list
-        print keys
         for i in kw:
             if i=="userids" or i =="money" or i=="mark":
                 kw[i]=hashlib.md5(kw[i]).hexdigest()
-        print keys
         a_list = []
         for i in keys:
             a_list.append("%s=%s" % (i, kw[i]))
@@ -28,11 +26,11 @@ class wallet_sign():
         b_list[0] = a_list[1]
         b_list[1] = a_list[0]
 
-        print '%s' % b_list  #[a=b,c=d]
+        print ('%s' % b_list)  #[a=b,c=d]
         sign_str2 = '&'.join(b_list) + key
-        print "Sign Str : "+sign_str2 #a=b&c=d&key=XXX
+        print ("Sign Str : "+sign_str2) #a=b&c=d&key=XXX
         md5_sign = hashlib.md5(sign_str2).hexdigest()
-        print "Sign : "+ md5_sign
+        print ("Sign : "+ md5_sign)
         return md5_sign
 
 # aa=wallet_sign()
@@ -50,4 +48,4 @@ class wallet_sign():
 bb=wallet_sign()
 cc={"type":"wechat","userids":"63","money":"100.00","mark":"T1518123354","dt":"1555485666"}
 dd=bb.wallet_sign(**cc)
-print dd
+print (dd)

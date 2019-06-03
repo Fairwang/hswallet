@@ -5,7 +5,7 @@ from selenium import webdriver
 import requests, xlrd, time
 from xlutils import copy
 import os,urllib,urllib2
-from hswallet.api.common import login_module
+from hswallet.api.common import wallet_login_module
 import sys
 
 reload(sys)
@@ -42,7 +42,7 @@ def interfaceTest(case_list, file_path):
     responses = []
     # 存返回报文的list
     start_time = time.strftime("%m%d%H%M%S", time.localtime())
-    login_token=login_module()
+    login_token=wallet_login_module()
     headers = login_token.login()
     time.sleep(2)
     for case in case_list:

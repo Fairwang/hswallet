@@ -12,9 +12,9 @@ class doexcel():
         '''
         try:
             book = xlrd.open_workbook(file_path)  # 打开excel
-        except Exception, e:
+        except Exception as e:
             # 如果路径不在或者excel不正确，返回报错信息
-            print '路径不在或者excel不正确', e
+            print ('路径不在或者excel不正确', e)
             return e
         else:
             sheet = book.sheet_by_index(0)#读取第一个sheet文件
@@ -54,7 +54,7 @@ class doexcel():
                 beuzhu = case [12]
                 testss.append({"product":product,"case_id":case_id,"interface_name":interface_name,"case_detail":case_detail,"method":method,"url":url,"param":param,"res_check":res_check,"tester":tester,"beuzhu":beuzhu})
 
-            except Exception, e:
+            except Exception as e:
                 return '测试用例格式不正确！%s' % e
         return testss
 
@@ -71,7 +71,7 @@ class doexcel():
             if s in res:
                 pass
             else:
-                print '错误，返回参数和预期结果不一致' + str(s)
+                print ('错误，返回参数和预期结果不一致' + str(s))
                 return '错误，返回参数和预期结果不一致' + str(s)
         return 'pass'
 
