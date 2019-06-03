@@ -124,7 +124,7 @@ def interfaceTest(case_list, file_path):
                 print data
                 print type(data)
                 print url,data,headers
-                results = requests.post(url,json=data,headers=headers).text
+            results = requests.post(url,json=data,headers=headers).text
             print len(results)
             if len(results)>1000:
                 responses.append(results.split("<title>")[1])

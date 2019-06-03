@@ -17,9 +17,9 @@ driver.maximize_window()
 webui_page.order()
 webui_page.order_list()
 webui_page.order_iframe()
-starttime = 10
+starttime = 3
 endtime = starttime+1
-create_time="2019/05/"+str(starttime)+" 00:00:00 - 2019/05/"+str(endtime)+" 00:00:00"
+create_time="2019/06/"+str(starttime)+" 00:00:00 - 2019/03/"+str(endtime)+" 00:00:00"
 webui_page.create_time(create_time)
 webui_page.excelExportData()
 time.sleep(5)
