@@ -45,7 +45,7 @@ class wallet_sign():
 #
 # bb=aa.wallet_sign(**cc)
 
-bb=wallet_sign()
-cc={"type":"wechat","userids":"63","money":"100.00","mark":"T1518123354","dt":"1555485666"}
-dd=bb.wallet_sign(**cc)
-print (dd)
+# bb=wallet_sign()
+# cc={"type":"wechat","userids":"63","money":"100.00","mark":"T1518123354","dt":"1555485666"}
+# dd=bb.wallet_sign(**cc)
+# print (dd)

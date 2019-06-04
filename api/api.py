@@ -1,4 +1,5 @@
 #!/user/bin/python
 #  -*-coding: utf-8-*-
-print ("hello world")
+import os
+os.system('python ./123.py')
 
