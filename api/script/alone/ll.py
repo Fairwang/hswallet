@@ -51,6 +51,6 @@
 import requests
 url="https://wallet.herbeauty.top/api/v1/uploadImg"
 headers={"Content-Type": "application/json","token":"209f305b30dd199ea2ddf0e1ec31d45d"}
-files={'file':open("C:\Users\\tinyw\Desktop\\之鞥文.jpg",'rb')}
+files={'file':open("C:\\Users\\tinyw\Desktop\\之鞥文.jpg",'rb')}
 r=requests.post(url,headers,files)
-print r
+print (r)

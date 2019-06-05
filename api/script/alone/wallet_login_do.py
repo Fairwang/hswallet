@@ -11,6 +11,7 @@ login=wallet_login_module.login_module()
 phone="15833330035"
 verify_codes=login.verify_code(phone)
 headers=verify_codes[0]
+print (headers)
 verify_code=verify_codes[1]
 def requsets_result(cases, file_path):
     excel_case = doexcel()

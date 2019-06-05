@@ -1,9 +1,10 @@
 #! user/bin/env
 # -*- coding: utf-8 -*-
 #获取token和验证码
-import  requests
+import  requests,redis
 import json,time
 class login_module():
+    redis = redis.Redis(host='47.99.94.49')
 
     # 登录后获取token 组成公共参数headers
     def login_token(self,phone):
@@ -17,7 +18,8 @@ class login_module():
                                       data).text  # {"code":0,"msg":"登录成功","data":{"token":"dc4581b61c7b82691e14b8028f0148fa","username":"测试4","account_id":2,"mobile":"13736048207"}}
         results_login = json.loads(results_login)
         token = results_login["data"]["token"]
-        username = results_login["data"]["username"]
+        self.redis.set('name', token)
+        # print(redis.get('name'))
         headers["token"] = str(token)
         return headers
 

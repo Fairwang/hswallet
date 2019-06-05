@@ -1,7 +1,6 @@
 #!/user/bin/python
 #  -*-coding: utf-8-*-
 import MySQLdb
-# class qrocde_url():
 class query_database():
     def query_database(self,sql):
         coon = MySQLdb.connect(host='120.77.41.244', user='test', passwd='test@2019#0809', db='cl_p2p', port=3308,
