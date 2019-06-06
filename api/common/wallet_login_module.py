@@ -21,6 +21,7 @@ class login_module():
         self.redis.set('name', token)
         # print(redis.get('name'))
         headers["token"] = str(token)
+
         return headers
 
     def code_msg(self,phone):
